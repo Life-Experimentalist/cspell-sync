@@ -1,0 +1,46 @@
+# Source files
+src/**
+!src/assets/**
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Build and test
+out/test/**
+test-fixtures/**
+test-workspace/**
+.vscode-test/**
+tsconfig.json
+*.map
+
+# Developer tools
+.eslintrc.json
+.eslintignore
+.editorconfig
+esbuild.js
+.prettierrc
+.vscode/
+
+# Documentation and project files that aren't needed in the extension
+images/dev-screenshots/**
+**/*.gif
+todo.md
+CONTRIBUTING.md
+.gitattributes
+.travis.yml
+.nvmrc
+.yarnrc
+.pnpm-lock.yaml
+*.yml
+*.yaml
+
+# Other unnecessary files
+node_modules/
+**/*.ts
+**/.DS_Store
+**/.vscode/**
+**/*.map
+**/tsconfig.json
+LICENSE.txt

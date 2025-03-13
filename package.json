@@ -1,0 +1,257 @@
+{
+  "name": "cspell-sync",
+  "publisher": "VKrishna04",
+  "displayName": "cSpell Sync",
+  "description": "Synchronize project cSpell.words with global cSpell.userWords",
+  "version": "1.0.0",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Life-Experimentalist/cspell-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Life-Experimentalist/cspell-sync/issues"
+  },
+  "homepage": "https://github.com/Life-Experimentalist/cspell-sync#readme",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cspell-sync.syncWords",
+        "title": "cSpell Sync: Sync Words from Projects to Global Dictionary"
+      },
+      {
+        "command": "cspell-sync.syncWordsToProject",
+        "title": "cSpell Sync: Sync Words from Global Dictionary to Projects"
+      },
+      {
+        "command": "cspell-sync.syncCustomToGlobal",
+        "title": "cSpell Sync: Sync Words from Custom Dictionaries to Global Dictionary"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "cspell-sync.syncWords",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "cspell-sync.syncWordsToProject",
+        "key": "ctrl+alt+g",
+        "mac": "cmd+alt+g",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "cSpell Sync",
+      "properties": {
+        "cspell-sync.autoSyncOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically sync cSpell words from project settings to global settings on startup."
+        },
+        "cspell-sync.initialSyncDelay": {
+          "type": "number",
+          "default": 5000,
+          "description": "Delay in milliseconds before running initial sync on startup."
+        },
+        "cspell-sync.combinedFileWaitTime": {
+          "type": "number",
+          "default": 1000,
+          "description": "Time in milliseconds to wait before checking combined.txt file after detection."
+        },
+        "cspell-sync.logToOutputChannel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Log detailed sync operations to output channel."
+        },
+        "cspell-sync.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications when words are synced."
+        },
+        "cspell-sync.syncProjectSettings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sync words from project settings.json (cSpell.words) to global dictionary."
+        },
+        "cspell-sync.syncCombinedTxt": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sync words from combined.txt files to global dictionary."
+        },
+        "cspell-sync.syncCustomDictionaries": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sync words from custom dictionaries to global dictionary."
+        },
+        "cspell-sync.syncLanguageSettings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sync words from language-specific settings to global dictionary."
+        },
+        "cspell-sync.enableBidirectionalSync": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable syncing words from global dictionary back to project settings."
+        },
+        "cspell-sync.bidirectionalSyncMode": {
+          "type": "string",
+          "enum": [
+            "shortcut",
+            "disabled",
+            "automatic"
+          ],
+          "default": "shortcut",
+          "description": "How to sync words from global dictionary to project: 'shortcut' (only via keyboard shortcut), 'automatic' (also sync when global dictionary changes), or 'disabled'."
+        },
+        "cspell-sync.projectLevelSync": {
+          "type": "object",
+          "default": {
+            "enabled": true,
+            "target": "cSpell.words"
+          },
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "description": "Enable syncing to project level settings (cSpell.words in .vscode/settings.json)"
+            },
+            "target": {
+              "type": "string",
+              "default": "cSpell.words",
+              "enum": [
+                "cSpell.words",
+                "cSpell.userWords",
+                "cSpell.ignoreWords"
+              ],
+              "description": "Which project-level cSpell setting to sync words to"
+            }
+          },
+          "description": "Settings for syncing to project level settings"
+        },
+        "cspell-sync.customDictionarySync": {
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "dictionaryName": ""
+          },
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable syncing words to a custom dictionary file"
+            },
+            "dictionaryName": {
+              "type": "string",
+              "default": "",
+              "description": "Name of the custom dictionary to sync to (must be defined in cSpell.customDictionaries)"
+            }
+          },
+          "description": "Settings for syncing to custom dictionaries"
+        },
+        "cspell-sync.workspaceSync": {
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "target": "cSpell.words"
+          },
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable syncing to workspace settings"
+            },
+            "target": {
+              "type": "string",
+              "default": "cSpell.words",
+              "enum": [
+                "cSpell.words",
+                "cSpell.userWords",
+                "cSpell.ignoreWords"
+              ],
+              "description": "Which workspace-level cSpell setting to sync words to"
+            }
+          },
+          "description": "Settings for syncing to workspace-level settings"
+        },
+        "cspell-sync.newDictionarySync": {
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "name": "project-dictionary",
+            "format": "json"
+          },
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable creating/syncing to a new dictionary file"
+            },
+            "name": {
+              "type": "string",
+              "default": "project-dictionary",
+              "description": "Name for the new dictionary"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "txt",
+                "json"
+              ],
+              "default": "json",
+              "description": "Format for the new dictionary file"
+            }
+          },
+          "description": "Settings for creating and syncing to a new dictionary"
+        },
+        "cspell-sync.customToGlobalSync": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sync words from custom dictionaries to global dictionary when running project-to-global sync"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile && node ./esbuild.js --production",
+    "build": "node ./esbuild.js",
+    "watch": "node ./esbuild.js --watch",
+    "dev": "node ./esbuild.js --watch",
+    "compile": "tsc -p ./",
+    "watch-tests": "tsc -p ./ --watch",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "verify": "npm run test && npm run lint"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^12.11.7",
+    "@types/sinon": "^10.0.13",
+    "@types/vscode": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "@vscode/test-electron": "^2.1.5",
+    "esbuild": "^0.25.1",
+    "eslint": "^8.9.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "sinon": "^15.0.1",
+    "typescript": "^4.3.5"
+  }
+}
