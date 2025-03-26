@@ -1,6 +1,7 @@
 # Source files
 src/**
 !src/assets/**
+icon_og.png
 
 # Git
 .git/

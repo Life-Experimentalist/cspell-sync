@@ -41,9 +41,6 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# Package files
-*.vsix
-
 # Temporary directories
 tmp/
 temp/

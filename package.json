@@ -5,6 +5,11 @@
   "description": "Synchronize project cSpell.words with global cSpell.userWords",
   "version": "1.0.0",
   "license": "MIT",
+  "author": {
+    "name": "VKrishna04",
+    "email": "krishnagsvv@gmail.com",
+    "url": "https://github.com/Life-Experimentalist"
+  },
   "icon": "icon.png",
   "repository": {
     "type": "git",
@@ -234,8 +239,8 @@
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js",
     "lint": "eslint src --ext ts",
-    "package": "vsce package",
-    "publish": "vsce publish",
+    "package": "npx @vscode/vsce package",
+    "publish": "@vscode/vsce publish",
     "verify": "npm run test && npm run lint"
   },
   "devDependencies": {
@@ -247,6 +252,7 @@
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
     "@vscode/test-electron": "^2.1.5",
+    "@vscode/vsce": "^3.2.2",
     "esbuild": "^0.25.1",
     "eslint": "^8.9.0",
     "glob": "^8.0.3",

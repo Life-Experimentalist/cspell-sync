@@ -127,7 +127,7 @@ You can disable the auto-remove behavior by configuring the project setting:
 
 ## For More Information
 
-- Check the [GitHub repository](https://github.com/yourusername/cspell-sync) for source code and updates
+- Check the [GitHub repository](https://github.com/Life-Experimentalist/cspell-sync) for source code and updates
 - Report issues or suggest features in the [issue tracker](https://github.com/yourusername/cspell-sync/issues)
 - Read the [CHANGELOG.md](CHANGELOG.md) file for version history and changes
 
