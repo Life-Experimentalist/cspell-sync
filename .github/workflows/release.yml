@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & publish extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node setup ───────────────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Quality gate ─────────────────────────────────────────────────────
+      - name: Lint
+        run: npm run lint
+
+      # ── Version validation ───────────────────────────────────────────────
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=$TAG"         >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate package.json version matches tag
+        run: |
+          PKG_VER=$(node -p "require('./package.json').version")
+          TAG_VER="${{ steps.version.outputs.version }}"
+          if [ "$PKG_VER" != "$TAG_VER" ]; then
+            echo "::error::package.json version ($PKG_VER) does not match tag ($TAG_VER)"
+            exit 1
+          fi
+          echo "Version verified: $PKG_VER"
+
+      # ── Build & package ──────────────────────────────────────────────────
+      - name: Build and package release artifacts
+        run: npm run package
+
+      - name: List artifacts
+        run: ls -lh releases/${{ steps.version.outputs.version }}/
+
+      # ── Extract release notes from CHANGELOG ─────────────────────────────
+      - name: Extract release notes
+        id: release_notes
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          awk "/^## \[$VERSION\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md \
+            > /tmp/release_notes.md
+          if [ ! -s /tmp/release_notes.md ]; then
+            echo "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details." \
+              > /tmp/release_notes.md
+          fi
+          printf '\n\n---\nSee [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full history.' \
+            >> /tmp/release_notes.md
+          echo "notes_file=/tmp/release_notes.md" >> "$GITHUB_OUTPUT"
+
+      # ── GitHub Release ────────────────────────────────────────────────────
+      - name: Create GitHub Release
+        id: release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "cSpell Sync ${{ steps.version.outputs.tag }}"
+          body_path: ${{ steps.release_notes.outputs.notes_file }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.tag, '-') }}
+          files: |
+            releases/${{ steps.version.outputs.version }}/cspell-sync-v*.vsix
+            releases/${{ steps.version.outputs.version }}/cspell-sync-source-v*.zip
+
+      - name: Print release URL
+        run: echo "Release → ${{ steps.release.outputs.url }}"

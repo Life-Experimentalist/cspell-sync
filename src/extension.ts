@@ -12,8 +12,6 @@ interface CachedSettings {
   timestamp: number;
 }
 
-type WordProcessor = () => Promise<number>;
-
 // Constants
 const CONFIG_CACHE_TTL = 60000; // 1 minute
 const SETTINGS_CACHE_TTL = 30000; // 30 seconds

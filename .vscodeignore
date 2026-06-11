@@ -1,47 +1,48 @@
-# Source files
+# Source files (compiled to dist/)
 src/**
-!src/assets/**
-icon_og.png
 
 # Git
 .git/
 .gitignore
 .github/
 
-# Build and test
+# Build config and dev tools
+tsconfig.json
+esbuild.js
+eslint.config.mjs
+.eslintrc.json
+scripts/
+docs/
+
+# Test outputs and fixtures
 out/test/**
 test-fixtures/**
 test-workspace/**
 .vscode-test/**
-tsconfig.json
-*.map
 
-# Developer tools
-.eslintrc.json
-.eslintignore
-.editorconfig
-esbuild.js
-.prettierrc
-.vscode/
-
-# Documentation and project files that aren't needed in the extension
-images/dev-screenshots/**
-**/*.gif
+# Developer documentation
+vsc-extension-quickstart.md
 todo.md
 CONTRIBUTING.md
-.gitattributes
-.travis.yml
-.nvmrc
-.yarnrc
-.pnpm-lock.yaml
+
+# CI / other config
 *.yml
 *.yaml
+.editorconfig
+.prettierrc
+.npmrc
 
-# Other unnecessary files
+# Unnecessary assets
+icon_og.png
+images/dev-screenshots/**
+**/*.gif
+
+# Never bundle
 node_modules/
 **/*.ts
+**/*.map
 **/.DS_Store
 **/.vscode/**
-**/*.map
-**/tsconfig.json
-LICENSE.txt
+
+# Releases dir (build artifacts, not needed in VSIX)
+releases/

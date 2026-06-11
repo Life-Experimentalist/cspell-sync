@@ -50,3 +50,6 @@ coverage/
 
 # Operating system files
 Thumbs.db
+
+# Root-level VSIX artifacts (releases/ dir is intentionally tracked)
+/*.vsix

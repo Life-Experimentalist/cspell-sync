@@ -2,8 +2,8 @@
   "name": "cspell-sync",
   "publisher": "VKrishna04",
   "displayName": "cSpell Sync",
-  "description": "Synchronize project cSpell.words with global cSpell.userWords",
-  "version": "1.0.0",
+  "description": "Synchronize project cSpell.words with global cSpell.userWords — automatically, bidirectionally, across all your projects.",
+  "version": "1.1.0",
   "license": "MIT",
   "author": {
     "name": "VKrishna04",
@@ -20,10 +20,11 @@
   },
   "homepage": "https://github.com/Life-Experimentalist/cspell-sync#readme",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Linters"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -113,20 +114,13 @@
         },
         "cspell-sync.bidirectionalSyncMode": {
           "type": "string",
-          "enum": [
-            "shortcut",
-            "disabled",
-            "automatic"
-          ],
+          "enum": ["shortcut", "disabled", "automatic"],
           "default": "shortcut",
           "description": "How to sync words from global dictionary to project: 'shortcut' (only via keyboard shortcut), 'automatic' (also sync when global dictionary changes), or 'disabled'."
         },
         "cspell-sync.projectLevelSync": {
           "type": "object",
-          "default": {
-            "enabled": true,
-            "target": "cSpell.words"
-          },
+          "default": { "enabled": true, "target": "cSpell.words" },
           "properties": {
             "enabled": {
               "type": "boolean",
@@ -136,11 +130,7 @@
             "target": {
               "type": "string",
               "default": "cSpell.words",
-              "enum": [
-                "cSpell.words",
-                "cSpell.userWords",
-                "cSpell.ignoreWords"
-              ],
+              "enum": ["cSpell.words", "cSpell.userWords", "cSpell.ignoreWords"],
               "description": "Which project-level cSpell setting to sync words to"
             }
           },
@@ -148,10 +138,7 @@
         },
         "cspell-sync.customDictionarySync": {
           "type": "object",
-          "default": {
-            "enabled": false,
-            "dictionaryName": ""
-          },
+          "default": { "enabled": false, "dictionaryName": "" },
           "properties": {
             "enabled": {
               "type": "boolean",
@@ -164,14 +151,11 @@
               "description": "Name of the custom dictionary to sync to (must be defined in cSpell.customDictionaries)"
             }
           },
-          "description": "Settings for syncing to custom dictionaries"
+          "description": "Settings for syncing to existing custom dictionaries"
         },
         "cspell-sync.workspaceSync": {
           "type": "object",
-          "default": {
-            "enabled": false,
-            "target": "cSpell.words"
-          },
+          "default": { "enabled": false, "target": "cSpell.words" },
           "properties": {
             "enabled": {
               "type": "boolean",
@@ -181,11 +165,7 @@
             "target": {
               "type": "string",
               "default": "cSpell.words",
-              "enum": [
-                "cSpell.words",
-                "cSpell.userWords",
-                "cSpell.ignoreWords"
-              ],
+              "enum": ["cSpell.words", "cSpell.userWords", "cSpell.ignoreWords"],
               "description": "Which workspace-level cSpell setting to sync words to"
             }
           },
@@ -193,11 +173,7 @@
         },
         "cspell-sync.newDictionarySync": {
           "type": "object",
-          "default": {
-            "enabled": false,
-            "name": "project-dictionary",
-            "format": "json"
-          },
+          "default": { "enabled": false, "name": "project-dictionary", "format": "json" },
           "properties": {
             "enabled": {
               "type": "boolean",
@@ -211,10 +187,7 @@
             },
             "format": {
               "type": "string",
-              "enum": [
-                "txt",
-                "json"
-              ],
+              "enum": ["txt", "json"],
               "default": "json",
               "description": "Format for the new dictionary file"
             }
@@ -238,26 +211,29 @@
     "watch-tests": "tsc -p ./ --watch",
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js",
-    "lint": "eslint src --ext ts",
-    "package": "npx @vscode/vsce package",
-    "publish": "@vscode/vsce publish",
-    "verify": "npm run test && npm run lint"
+    "lint": "eslint src",
+    "package": "node ./scripts/package.js",
+    "publish:vsce": "npx @vscode/vsce publish",
+    "publish:ovsx": "npx ovsx publish",
+    "publish:all": "npm run publish:vsce && npm run publish:ovsx"
   },
   "devDependencies": {
-    "@types/glob": "^7.2.0",
-    "@types/mocha": "^9.1.0",
-    "@types/node": "^12.11.7",
-    "@types/sinon": "^10.0.13",
-    "@types/vscode": "^1.60.0",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
-    "@vscode/test-electron": "^2.1.5",
-    "@vscode/vsce": "^3.2.2",
-    "esbuild": "^0.25.1",
-    "eslint": "^8.9.0",
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^22.0.0",
+    "@types/sinon": "^17.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vscode/test-electron": "^2.4.0",
+    "@vscode/vsce": "^3.9.0",
+    "archiver": "^7.0.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^9.0.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "sinon": "^15.0.1",
-    "typescript": "^4.3.5"
+    "ovsx": "^1.0.0",
+    "sinon": "^17.0.0",
+    "typescript": "^5.8.0"
   }
 }
