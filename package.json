@@ -213,6 +213,7 @@
     "test": "node ./out/test/runTest.js",
     "lint": "eslint src",
     "package": "node ./scripts/package.js",
+    "release": "node ./scripts/release.js",
     "publish:vsce": "npx @vscode/vsce publish",
     "publish:ovsx": "npx ovsx publish",
     "publish:all": "npm run publish:vsce && npm run publish:ovsx"
