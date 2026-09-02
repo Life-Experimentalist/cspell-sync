@@ -1,0 +1,40 @@
+{
+	"$schema": "https://vkrishna04.me/schemas/project-manifest.schema.json",
+	"manifestVersion": 2,
+	"tagline": "Your custom words. Everywhere. Automatically.",
+	"summary": "A VS Code extension that keeps cSpell custom words in sync between every project and the global dictionary, in both directions. Words added in one project reach the global list within a second, so opening a new project no longer means red squiggles under your whole technical vocabulary.",
+	"status": "active",
+	"icon": "SiTypescript",
+	"readme": true,
+	"technologies": [
+		"TypeScript",
+		"VS Code API",
+		"esbuild"
+	],
+	"tags": [
+		"vscode-extension",
+		"spell-check",
+		"developer-tools",
+		"productivity"
+	],
+	"highlights": [
+		"Reads from four sources — project settings, custom dictionaries, language-specific settings and combined.txt drop files — and merges them into the global word list.",
+		"Bidirectional: global words can be pushed back into a project, workspace, existing dictionary or a new dictionary file.",
+		"A debounced watcher on .vscode/settings.json syncs a newly added word within one second.",
+		"Bundles to roughly 30 KB with zero runtime npm dependencies, and activates on onStartupFinished so it never delays editor startup."
+	],
+	"links": {
+		"repo": "https://github.com/Life-Experimentalist/cspell-sync"
+	},
+	"sections": [
+		{
+			"type": "list",
+			"heading": "Design constraints",
+			"items": [
+				"Activation on onStartupFinished — a spell-checker helper must never be on the startup critical path.",
+				"A two-tier settings cache with a 30-second TTL, so unchanged JSON is not reparsed on every keystroke.",
+				"Incremental sync that processes only the changed settings file rather than every workspace folder."
+			]
+		}
+	]
+}
